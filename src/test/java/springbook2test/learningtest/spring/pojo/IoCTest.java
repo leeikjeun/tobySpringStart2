@@ -5,6 +5,8 @@ import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.beans.factory.config.RuntimeBeanNameReference;
 import org.springframework.beans.factory.config.RuntimeBeanReference;
 import org.springframework.beans.factory.support.RootBeanDefinition;
+import org.springframework.beans.factory.xml.XmlBeanDefinitionReader;
+import org.springframework.context.support.GenericApplicationContext;
 import org.springframework.context.support.StaticApplicationContext;
 import springbook2.learningtest.spring.pojo.Hello;
 import springbook2.learningtest.spring.pojo.StringPrinter;
@@ -60,7 +62,22 @@ public class IoCTest {
         assertThat(ac.getBean("printer").toString(),is("Hello Spring"));
     }
 
-    
+
+    @Test
+    public void genericApplicationContext(){
+        GenericApplicationContext ac = new GenericApplicationContext();
+
+        XmlBeanDefinitionReader reader = new XmlBeanDefinitionReader(ac);
+
+        reader.loadBeanDefinitions("/simplecontext.xml");//메타데이터 정보 넣는 과정
+
+        ac.refresh(); //메타정보 등록 애플리케이션 컨텍이너를 초괴화 하는 명령어
+
+        Hello hello = ac.getBean("hello",Hello.class);
+        hello.print();
+
+        assertThat(ac.getBean("printer").toString(),is("Hello Spring"));
+    }
 
 
 }
