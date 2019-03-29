@@ -4,11 +4,16 @@ import org.junit.Test;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.beans.factory.config.RuntimeBeanNameReference;
 import org.springframework.beans.factory.config.RuntimeBeanReference;
+import org.springframework.beans.factory.support.PropertiesBeanDefinitionReader;
 import org.springframework.beans.factory.support.RootBeanDefinition;
 import org.springframework.beans.factory.xml.XmlBeanDefinitionReader;
+import org.springframework.beans.factory.xml.XmlReaderContext;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.GenericApplicationContext;
+import org.springframework.context.support.GenericXmlApplicationContext;
 import org.springframework.context.support.StaticApplicationContext;
 import springbook2.learningtest.spring.pojo.Hello;
+import springbook2.learningtest.spring.pojo.Printer;
 import springbook2.learningtest.spring.pojo.StringPrinter;
 
 import static org.hamcrest.CoreMatchers.is;
@@ -66,7 +71,7 @@ public class IoCTest {
     @Test
     public void genericApplicationContext(){
         GenericApplicationContext ac = new GenericApplicationContext();
-
+//        GenericApplicationContext ac = new GenericXmlApplicationContext("/simplecontext.xml"); 또 다른 사용법(이건 refresh할필요가 없다)
         XmlBeanDefinitionReader reader = new XmlBeanDefinitionReader(ac);
 
         reader.loadBeanDefinitions("/simplecontext.xml");//메타데이터 정보 넣는 과정
@@ -78,6 +83,29 @@ public class IoCTest {
 
         assertThat(ac.getBean("printer").toString(),is("Hello Spring"));
     }
+    /*
+    * BeanDefinition 오브젝트만 반환할 수 있으면 설정 메타정보는 어떤포맷으로 만들어져도 상관 없다.
+    * */
 
+    @Test
+    public void ContextTest(){
+        ApplicationContext parent = new GenericXmlApplicationContext("/parentContext.xml");
+        GenericApplicationContext child = new GenericApplicationContext(parent);
+
+        XmlBeanDefinitionReader reader = new XmlBeanDefinitionReader(child);
+        reader.loadBeanDefinitions("/childContext.xml");
+        child.refresh();
+
+        Printer printer = parent.getBean("printer",Printer.class);
+        assertThat(printer, is(notNullValue()));
+
+        Hello childHello = child.getBean("hello",Hello.class);
+        assertThat(childHello, is(notNullValue()));
+
+        printer = child.getBean("printer",Printer.class);
+
+        childHello.print();
+        assertThat(printer.toString(), is("Hello Child"));
+    }
 
 }
