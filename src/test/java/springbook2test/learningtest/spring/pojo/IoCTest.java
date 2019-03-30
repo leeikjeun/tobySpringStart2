@@ -13,10 +13,7 @@ import org.springframework.context.annotation.AnnotationConfigApplicationContext
 import org.springframework.context.support.GenericApplicationContext;
 import org.springframework.context.support.GenericXmlApplicationContext;
 import org.springframework.context.support.StaticApplicationContext;
-import springbook2.learningtest.spring.pojo.AnnotationHello;
-import springbook2.learningtest.spring.pojo.Hello;
-import springbook2.learningtest.spring.pojo.Printer;
-import springbook2.learningtest.spring.pojo.StringPrinter;
+import springbook2.learningtest.spring.pojo.*;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
@@ -116,6 +113,14 @@ public class IoCTest {
                 "springbook2.learningtest.spring.pojo");
         AnnotationHello hello = ac.getBean("annoHello",AnnotationHello.class);
 
+        assertThat(hello,is(notNullValue()));
+    }
+
+    @Test
+    public void anntionConfigTest(){
+        ApplicationContext ac = new AnnotationConfigApplicationContext(AnnotationHelloConfig.class);
+
+        AnnotationHello hello = ac.getBean("annotationHello", AnnotationHello.class);
         assertThat(hello,is(notNullValue()));
     }
 }
