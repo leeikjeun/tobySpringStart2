@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns="http://xmlns.jcp.org/xml/ns/javaee"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd"
+         version="3.1">
+    <context-param>
+        <param-name>contextConfigLocation</param-name>
+        <param-value>/WEB-INF/**/*Context.xml</param-value>
+        <!-- context 경로 설정 **은 모든 서브 폴더를 말하며 *은 앞의 글자 아무거나를 뜻함 -->
+    </context-param>
+    <!--<context-param>-->
+        <!--<param-name>contextClass</param-name>-->
+        <!--<param-value>org.springframework.web.context.support.AnnotationConfigWebApplicationContext</param-value>-->
+    <!--</context-param>
+    이걸 통해 Context를 봐꿀수 있다 Annotaion을 사용시 contextConfiglocation 파라미터를 반드시 선언해주어야 한다.(이때는 XML위치가 아닌 설정 메타 정보가 있는
+    클래스나 빈 스캐닝 패키지를 적용할 수 있다 
+    -->
+    <listener>
+        <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+        <!--루트 애플리케이션 컨텍스트를 만들어주고 초기화 하는 리스터-->
+        <!-- contextLoader가 기본적으로 생성하는 것은 XmlWebApplicationContext이다 변경하고 싶을시 contextClass파라미터를 통해 봐꿔주면 된다-->
+    </listener>
+    <servlet>
+        <servlet-name>dispatcher</servlet-name>
+        <!-- 서블릿 이름같은 경우에는 각각의 독립적인 이름을 설정할 수 있는데 이름이 중요한 이유는 서블릿 컨텍스트는 서블릿 이름 + something.xml이라는 규칙을 가지고 있기 때문 -->
+        <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+        <load-on-startup>1</load-on-startup>
+        <!--<init-param>-->
+            <!--<param-name>contextConfigLocation</param-name>-->
+            <!--<param-value>/WEB-INF/**/*Context.xml</param-value>-->
+        <!--</init-param>  이렇게 시 위에 contextConfig는 필요 없어짐 각각의 서블릿에서 따로 설정할때 사용-->
+        
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>dispatcher</servlet-name>
+        <url-pattern>*.form</url-pattern>
+    </servlet-mapping>
+</web-app>

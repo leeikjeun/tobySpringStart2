@@ -9,9 +9,11 @@ import org.springframework.beans.factory.support.RootBeanDefinition;
 import org.springframework.beans.factory.xml.XmlBeanDefinitionReader;
 import org.springframework.beans.factory.xml.XmlReaderContext;
 import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.support.GenericApplicationContext;
 import org.springframework.context.support.GenericXmlApplicationContext;
 import org.springframework.context.support.StaticApplicationContext;
+import springbook2.learningtest.spring.pojo.AnnotationHello;
 import springbook2.learningtest.spring.pojo.Hello;
 import springbook2.learningtest.spring.pojo.Printer;
 import springbook2.learningtest.spring.pojo.StringPrinter;
@@ -108,4 +110,12 @@ public class IoCTest {
         assertThat(printer.toString(), is("Hello Child"));
     }
 
+    @Test
+    public void annotaionContextTest(){
+        ApplicationContext ac = new AnnotationConfigApplicationContext(
+                "springbook2.learningtest.spring.pojo");
+        AnnotationHello hello = ac.getBean("annoHello",AnnotationHello.class);
+
+        assertThat(hello,is(notNullValue()));
+    }
 }
