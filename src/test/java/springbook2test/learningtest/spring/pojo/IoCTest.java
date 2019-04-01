@@ -123,4 +123,8 @@ public class IoCTest {
         AnnotationHello hello = ac.getBean("annotationHello", AnnotationHello.class);
         assertThat(hello,is(notNullValue()));
     }
+    /*
+    * Configuration안에 있은 Bean 과 없는 Bean의 차이점은 Con안에 있는 빈은 싱글톤 없는아이는 매번 새로운 인스턴스로 생성되어 만들어진다.
+    * */
+
 }
